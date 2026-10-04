@@ -20,8 +20,9 @@ function getData() {
         .split("\n")[1]
         .replace(/google.visualization.Query.setResponse\(|\);/g, ""),
     );
-    for (i = 0; i < json.table.rows.length; i++) {
-      displayPost(json.table.rows[i].c, i);
+    const reversedPostsArray = json.table.rows.toReversed();
+    for (i = 0; i < reversedPostsArray.length; i++) {
+      displayPost(reversedPostsArray[i].c, i);
     }
   });
 }
