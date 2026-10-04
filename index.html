@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+      crossorigin="anonymous"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
+
+    <link rel="stylesheet" type="text/css" href="styles/main.css" />
+    <link rel="stylesheet" type="text/css" href="styles/modal.css" />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="../common/styles/sidemenu.css"
+    />
+
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+      crossorigin="anonymous"
+    ></script>
+
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sketch Log</title>
+    <link rel="icon" type="image/x-icon" href="./assets/icon.png" />
+  </head>
+  <body>
+    <div class="main-body" id="main-body">
+      <div class="menu-icon-container">
+        <i class="fa fa-bars menu-icon shadow" onClick="toggleSideMenu();"></i>
+      </div>
+      <div class="container mt-3">
+        <div
+          class="d-flex flex-row flex-wrap justify-content-center pt-3 log-row"
+        >
+          <div class="sidebar">
+            <img src="./assets/crying_cat.png" class="sidebar-img" />
+            <div class="about-box">
+              <p>
+                a page for me to dump any and every drawing/ sketch that I’ve
+                made since I am Very Bad when it comes to updating my actual
+                social media. <br /><br />
+                You can find my more polished artworks in my gallery linked
+                below.
+              </p>
+            </div>
+            <div class="sidebar-buttons-box mt-2">
+              <a
+                href="https://kanekos.neocities.org/"
+                class="sidebar-btn yellow"
+              >
+                <i class="fa fa-arrow-circle-left me-2" aria-hidden="true"></i>
+                home</a
+              >
+              <a
+                href="https://kanekos.neocities.org/gallery/"
+                class="sidebar-btn"
+              >
+                gallery
+                <i class="fa fa-arrow-circle-right ms-2" aria-hidden="true"></i>
+              </a>
+            </div>
+          </div>
+          <div class="posts-container mb-4" id="posts-container"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal -->
+    <div
+      class="modal fade"
+      id="galleryModal"
+      tabindex="-1"
+      aria-labelledby="galleryModalLabel"
+    >
+      <i
+        class="fa fa-times-circle-o modal-cross"
+        aria-hidden="true"
+        data-bs-dismiss="modal"
+        aria-label="Close"
+      ></i>
+      <div class="modal-nav-container">
+        <i
+          class="fa fa-chevron-left modal-arrow modal-arrow-left"
+          aria-hidden="true"
+          onclick="showNextOrPrevImg(-1)"
+        ></i>
+      </div>
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="d-flex flex-row justify-content-center modal-row">
+            <div class="modal-image-container">
+              <img src="" class="modal-image img-fluid" id="modal-image" />
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-nav-container">
+        <i
+          class="fa fa-chevron-right modal-arrow modal-arrow-right"
+          aria-hidden="true"
+          onclick="showNextOrPrevImg(1)"
+        ></i>
+      </div>
+    </div>
+
+    <script src="../common/scripts/sidemenu.js"></script>
+    <script src="scripts/main.js"></script>
+  </body>
+</html>
