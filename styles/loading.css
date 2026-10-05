@@ -1,0 +1,60 @@
+/*-------------------------------loading screen---------------------------------------*/
+
+#loading-screen {
+  position: fixed;
+  flex-direction: column;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: linear-gradient(
+    45deg,
+    rgba(237, 208, 159, 1) 0%,
+    rgba(171, 215, 216, 1) 60%
+  );
+  z-index: 9999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-bottom: 50px;
+}
+
+.error-message {
+  font-size: 30px;
+  color: #6d2932;
+  font-family: "fakefutura";
+}
+
+.loader {
+  width: calc(6 * 30px);
+  height: 50px;
+  display: flex;
+  color: #ffffff;
+  filter: drop-shadow(30px 25px 0 currentColor)
+    drop-shadow(60px 0 0 currentColor) drop-shadow(120px 0 0 currentColor);
+  clip-path: inset(0 100% 0 0);
+  animation: l12 0.5s infinite steps(7);
+}
+.loader:before {
+  content: "";
+  width: 30px;
+  height: 25px;
+  --c: no-repeat radial-gradient(farthest-side, currentColor 92%, #0000);
+  background:
+    var(--c) left / 70% 70%,
+    var(--c) right/20% 20%,
+    var(--c) top 0 right 15%/20% 20%,
+    var(--c) bottom 0 right 15%/20% 20%;
+}
+@keyframes l12 {
+  100% {
+    clip-path: inset(0 -30px 0 0);
+  }
+}
+
+.loading-text {
+  font-family: "Dosis";
+  font-size: 1.5rem;
+  font-weight: 900;
+  margin-top: 20px;
+}
