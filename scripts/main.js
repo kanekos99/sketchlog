@@ -12,11 +12,11 @@ const loadingScreen = document.getElementById("loading-screen");
 let postsCollection = [];
 let tagsList = new Set([]);
 
-const s_sheetId = "1G_t1u2Y9VriPwUvXmh8xXmn2QLEYEvDMb_XfeScUGlM";
+const post_sheetId = "1G_t1u2Y9VriPwUvXmh8xXmn2QLEYEvDMb_XfeScUGlM";
 
 function getData() {
   // Get the data
-  const url = `https://docs.google.com/spreadsheets/d/${s_sheetId}/gviz/tq?`;
+  const url = `https://docs.google.com/spreadsheets/d/${post_sheetId}/gviz/tq?`;
   const retrievedSheet = getSheet(url);
 
   return retrievedSheet.then((result) => {
@@ -56,6 +56,11 @@ function displaySinglePost(postData) {
   location.hash = "log-" + postData[4];
   handleHomeOrBack();
   displayPost(postData, true);
+
+  const commentWidget = document.createElement("div");
+  commentWidget.id = "c_widget";
+  postsContainer.appendChild(commentWidget);
+  appendCommentBox();
 }
 
 function displayPost(postData, isSinglePost) {
