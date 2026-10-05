@@ -32,7 +32,8 @@ function getData() {
     }
 
     postsCollection = json.table.rows.toReversed();
-    displayAllPosts(postsCollection);
+    getTagsList(postsCollection);
+    // displayAllPosts(postsCollection);
   });
 }
 
@@ -45,10 +46,13 @@ function displayAllPosts(postsCollection) {
   for (i = 0; i < postsCollection.length; i++) {
     displayPost(postsCollection[i].c, false);
   }
+  handlePagination();
 }
 
 function displaySinglePost(postData) {
   postsContainer.innerHTML = "";
+  pagination.innerHTML = "";
+
   location.hash = "log-" + postData[4];
   handleHomeOrBack();
   displayPost(postData, true);
@@ -76,8 +80,6 @@ function displayDate(postData) {
     year: "numeric",
   });
 
-  if (postData[4]) {
-  }
   const dateHTML = `
     <div class="date-row">
       <a class="post-num" 
@@ -150,8 +152,6 @@ function displayTags(postData) {
       </a>
     `;
     combinedTagsHTML += tagHTML;
-
-    tagsList.add(tag.toLowerCase().replaceAll(" ", "-"));
   });
   const tagsRowHTML = `
    <div class="d-flex flex-row flex-wrap justify-content-start tag-row">
@@ -162,10 +162,17 @@ function displayTags(postData) {
   return tagsRowHTML;
 }
 
+function getTagsList(postsCollection) {
+  for (i = 0; i < postsCollection.length; i++) {
+    const postTags = postsCollection[i].c[3].v.split(", ");
+    postTags.forEach((tag) => {
+      tagsList.add(tag.toLowerCase().replaceAll(" ", "-"));
+    });
+  }
+}
+
 function handleTagFilter() {
-  const currentHash = window.location.hash.slice(1);
-  const params = new URLSearchParams(currentHash);
-  const currentTag = params.get("tag");
+  const currentTag = getHashParms().get("tag");
   if (isValidHash(currentTag)) {
     const formattedHash = currentTag.trim().toLowerCase().replaceAll("-", " ");
     const tagFilterHTML = `
@@ -179,9 +186,14 @@ function handleTagFilter() {
   }
 }
 
+function getHashParms() {
+  const currentHash = window.location.hash.slice(1);
+  const params = new URLSearchParams(currentHash);
+  return params;
+}
+
 function handleHomeOrBack() {
-  const isOnHomePage = !window.location.hash && !window.location.search;
-  if (isOnHomePage) {
+  if (isOnHomePage()) {
     homeButton.innerHTML = `
         <i class="fa fa-home me-2" aria-hidden="true"></i>home
     `;
@@ -194,20 +206,28 @@ function handleHomeOrBack() {
 }
 
 function goHomeOrBack() {
-  const isOnHomePage = !window.location.hash && !window.location.search;
-  if (isOnHomePage) {
+  if (isOnHomePage()) {
     window.open("https://kanekos.neocities.org/", "_blank");
   } else {
     redirectToHome();
   }
 }
 
+function isOnHomePage() {
+  if (!window.location.hash) {
+    return true;
+  }
+  const params = getHashParms();
+  if (params.size === 1 && params.has("page")) {
+    return true;
+  }
+  return false;
+}
+
 function redirectToHome() {
-  history.pushState(
-    null,
-    "",
-    window.location.pathname + window.location.search,
-  );
+  if (!getCurrentPage() || (getCurrentPage() && getCurrentTag())) {
+    history.pushState(null, "", window.location.pathname);
+  }
   displayAllPosts(postsCollection);
 }
 
@@ -252,11 +272,11 @@ function getPostsByTag(tagName) {
   return filteredPosts;
 }
 
-function isValidHash(currentHash) {
-  if (!currentHash || currentHash.trim() === "") {
+function isValidHash(currentTag) {
+  if (!currentTag || currentTag.trim() === "") {
     return false;
   }
-  const isValidTag = [...tagsList].includes(currentHash);
+  const isValidTag = [...tagsList].includes(currentTag);
   return isValidTag;
 }
 
@@ -275,8 +295,7 @@ function isPostLink(currentHash) {
 
 function handleHashChange() {
   const currentHash = window.location.hash.slice(1);
-  const params = new URLSearchParams(currentHash);
-  const currentTag = params.get("tag");
+  const currentTag = getHashParms().get("tag");
   if (isValidHash(currentTag)) {
     getPostsByTag(currentTag);
     return;
