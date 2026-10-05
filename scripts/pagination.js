@@ -1,5 +1,5 @@
 const pagination = document.getElementById("pagination");
-const postsPerPage = 3;
+const postsPerPage = 6;
 let posts = [];
 
 function getCurrentPage() {
