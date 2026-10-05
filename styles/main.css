@@ -155,11 +155,13 @@ button {
   font-size: 1.1rem;
   cursor: pointer;
   opacity: 0.7;
+  color: #246469 !important;
+  text-decoration: none !important;
 }
 
 .post-num:hover {
   opacity: 1;
-  text-decoration: #67a9a9 underline dotted 3px;
+  text-decoration: #67a9a9 underline dotted 3px !important;
 }
 
 .date-label {
@@ -201,6 +203,11 @@ button {
   aspect-ratio: auto;
   max-height: 24rem;
   /* border: 3px dotted #d6eef3; */
+}
+
+.thumbnail-single {
+  aspect-ratio: auto;
+  max-height: unset;
 }
 
 hr.dotted {

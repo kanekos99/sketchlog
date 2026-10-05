@@ -43,15 +43,25 @@ function displayAllPosts(postsCollection) {
   handleHomeOrBack();
 
   for (i = 0; i < postsCollection.length; i++) {
-    displayPost(postsCollection[i].c, i);
+    displayPost(postsCollection[i].c, false);
   }
 }
 
-function displayPost(postData) {
+function displaySinglePost(postData) {
+  postsContainer.innerHTML = "";
+  location.hash = "log-" + postData[4];
+  handleHomeOrBack();
+  displayPost(postData, true);
+}
+
+function displayPost(postData, isSinglePost) {
   const postBox = document.createElement("div");
   postBox.className = "post-box";
   postBox.insertAdjacentHTML("beforeend", displayDate(postData));
-  postBox.insertAdjacentHTML("beforeend", displayImages(postData));
+  postBox.insertAdjacentHTML(
+    "beforeend",
+    displayImages(postData, isSinglePost),
+  );
   postBox.insertAdjacentHTML("beforeend", displayText(postData));
   postBox.insertAdjacentHTML("beforeend", displayTags(postData));
   postsContainer.appendChild(postBox);
@@ -67,21 +77,22 @@ function displayDate(postData) {
   });
 
   if (postData[4]) {
-
   }
   const dateHTML = `
     <div class="date-row">
-      <span class="post-num">
+      <a class="post-num" 
+        href="#log-${postData[4]}"
+      >
         <i class="fa fa-caret-right me-1" aria-hidden="true"></i>
-        log: ${postData[4].toString().padStart(3 , 0)}
-      </span>
+        log: ${postData[4].toString().padStart(3, 0)}
+      </a>
       <span class="date-label">${postDate}</span>
     </div>
   `;
   return dateHTML;
 }
 
-function displayImages(postData) {
+function displayImages(postData, isSinglePost) {
   const rawImages = postData[1].v;
   const postImages = rawImages.split(", ");
   let combinedImagesHTML = "";
@@ -89,6 +100,9 @@ function displayImages(postData) {
     let imageClass = "thumbnail";
     if (postImages.length <= 1) {
       imageClass = "thumbnail thumbnail-solo";
+    }
+    if (isSinglePost) {
+      imageClass = "thumbnail thumbnail-single";
     }
     const imageUrl = "https://kanekos99.github.io/sketch-gallery/img/" + image;
     const imageHTML = `
@@ -179,8 +193,6 @@ function handleHomeOrBack() {
 
 function goHomeOrBack() {
   const isOnHomePage = !window.location.hash && !window.location.search;
-  console.log(isOnHomePage);
-
   if (isOnHomePage) {
     window.open("https://kanekos.neocities.org/", "_blank");
   } else {
@@ -239,20 +251,43 @@ function getPostsByTag(tagName) {
 }
 
 function isValidHash(currentHash) {
-  const isValidHash =
-    currentHash &&
-    currentHash.trim() !== "" &&
-    [...tagsList].includes(currentHash);
-  return isValidHash;
+  if (!currentHash && currentHash.trim() === "") {
+    return false;
+  }
+  const isValidTag = [...tagsList].includes(currentHash);
+  return isValidTag;
+}
+
+function isPostLink(currentHash) {
+  if (!currentHash && currentHash.trim() === "") {
+    return false;
+  }
+  if (currentHash.includes("log-")) {
+    const postId = Number(currentHash.split("-")[1]);
+    if (postId || postId === 0) {
+      return postId >= 0 && postId in postsCollection;
+    }
+  }
+  return false;
 }
 
 function handleHashChange() {
   const currentHash = window.location.hash.slice(1);
   if (isValidHash(currentHash)) {
     getPostsByTag(currentHash);
+  } else if (isPostLink(currentHash)) {
+    showPost(currentHash);
   } else {
     redirectToHome();
   }
+}
+
+function showPost(currentHash) {
+  const postId = currentHash.split("-")[1];
+  const postData = postsCollection.filter((post) => {
+    return post.c[4].toString() == postId.toString();
+  });
+  displaySinglePost(postData[0].c);
 }
 
 window.addEventListener("DOMContentLoaded", () => {
