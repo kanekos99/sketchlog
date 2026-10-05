@@ -145,7 +145,7 @@ function displayTags(postData) {
     const tagLink = tag.toLowerCase().replaceAll(" ", "-");
 
     const tagHTML = `
-      <a href="#${tagLink}" class="post-tag">
+      <a href="#tag=${tagLink}" class="post-tag">
         #${tag}
       </a>
     `;
@@ -164,8 +164,10 @@ function displayTags(postData) {
 
 function handleTagFilter() {
   const currentHash = window.location.hash.slice(1);
-  if (isValidHash(currentHash)) {
-    const formattedHash = currentHash.trim().toLowerCase().replaceAll("-", " ");
+  const params = new URLSearchParams(currentHash);
+  const currentTag = params.get("tag");
+  if (isValidHash(currentTag)) {
+    const formattedHash = currentTag.trim().toLowerCase().replaceAll("-", " ");
     const tagFilterHTML = `
       <div class="tag-filter">
         <div class="tag-filter-text">
@@ -251,7 +253,7 @@ function getPostsByTag(tagName) {
 }
 
 function isValidHash(currentHash) {
-  if (!currentHash && currentHash.trim() === "") {
+  if (!currentHash || currentHash.trim() === "") {
     return false;
   }
   const isValidTag = [...tagsList].includes(currentHash);
@@ -273,12 +275,17 @@ function isPostLink(currentHash) {
 
 function handleHashChange() {
   const currentHash = window.location.hash.slice(1);
-  if (isValidHash(currentHash)) {
-    getPostsByTag(currentHash);
+  const params = new URLSearchParams(currentHash);
+  const currentTag = params.get("tag");
+  if (isValidHash(currentTag)) {
+    getPostsByTag(currentTag);
+    return;
   } else if (isPostLink(currentHash)) {
     showPost(currentHash);
+    return;
   } else {
     redirectToHome();
+    return;
   }
 }
 
