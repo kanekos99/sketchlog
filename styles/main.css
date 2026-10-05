@@ -270,12 +270,18 @@ hr.dotted {
   background-color: rgba(237, 208, 159, 1) !important;
   color: rgb(127, 101, 68) !important;
   box-shadow: 2px 2px rgb(173, 139, 95) !important;
-
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 50;
+}
+
+.to-top-btn:hover {
+  background-color: rgb(200, 165, 104) !important;
+  color: rgb(102, 80, 51) !important;
+  box-shadow: 2px 2px rgb(141, 112, 74) !important;
+  transition: ease-in-out 0.2s;
 }
 
 /*---------------------------- Scrollbar -----------------------------*/
